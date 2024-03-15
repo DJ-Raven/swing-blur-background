@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.Random;
 
 public class PanelItem extends BlurChild {
 
@@ -23,9 +24,15 @@ public class PanelItem extends BlurChild {
         setLayout(new MigLayout("al center center"));
         JLabel label = new JLabel("Move me");
         label.putClientProperty(FlatClientProperties.STYLE, "" +
-                "foreground:#FFFFFF;" +
                 "font:bold +5");
         add(label);
+        add(new JTextField());
+        JButton button = new JButton("Click me");
+        button.addActionListener(e -> {
+            Random ran = new Random();
+            label.setText("Move me " + ran.nextInt(999));
+        });
+        add(button);
 
         MouseAdapter mouseAdapter = new MouseAdapter() {
             @Override

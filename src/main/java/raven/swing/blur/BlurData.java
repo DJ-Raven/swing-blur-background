@@ -10,4 +10,6 @@ public interface BlurData {
     BufferedImage getImageAt(Shape shape);
 
     BufferedImage getOutlineImage(Shape shape);
+
+    Component getSource();
 }
