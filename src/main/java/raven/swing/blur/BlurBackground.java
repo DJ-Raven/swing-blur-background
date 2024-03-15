@@ -6,8 +6,6 @@ import com.twelvemonkeys.image.ImageUtil;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
-import java.awt.geom.RectangularShape;
-import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 
 public class BlurBackground extends JComponent implements BlurData {
@@ -42,23 +40,27 @@ public class BlurBackground extends JComponent implements BlurData {
 
     @Override
     public BufferedImage getBlurImageAt(Shape shape) {
-        if (shape instanceof Rectangle2D) {
-            Rectangle rec = shape.getBounds();
-            return blurImage.getSubimage(rec.x, rec.y, rec.width, rec.height);
-        }
-        Rectangle rec = shape.getBounds();
-        BufferedImage image = getBlurImageAt(rec);
-        return createShapeImage(image, shape, false);
+        return getImage(blurImage, shape);
     }
 
     @Override
     public BufferedImage getImageAt(Shape shape) {
-        return null;
+        return getImage(buffImage, shape);
     }
 
     @Override
     public BufferedImage getOutlineImage(Shape shape) {
         return null;
+    }
+
+    private BufferedImage getImage(BufferedImage image, Shape shape) {
+        if (shape instanceof Rectangle2D) {
+            Rectangle rec = shape.getBounds();
+            return image.getSubimage(rec.x, rec.y, rec.width, rec.height);
+        }
+        Rectangle rec = shape.getBounds();
+        BufferedImage recImage = getImage(image, rec);
+        return createShapeImage(recImage, shape, false);
     }
 
     private BufferedImage createShapeImage(BufferedImage image, Shape shape, boolean outline) {

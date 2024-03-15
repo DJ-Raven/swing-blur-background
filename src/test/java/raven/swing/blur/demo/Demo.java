@@ -13,12 +13,12 @@ public class Demo extends JFrame {
 
     public Demo() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(UIScale.scale(new Dimension(1366, 768)));
+        setSize(UIScale.scale(new Dimension(800, 500)));
         setLocationRelativeTo(null);
 
         BlurBackground background = new BlurBackground(new ImageIcon(getClass().getResource("/raven/swing/blur/background.jpg")).getImage());
         background.setLayout(new MigLayout());
-
+        background.add(new PanelItem(), "width 300, height 300");
         add(background);
     }
 
