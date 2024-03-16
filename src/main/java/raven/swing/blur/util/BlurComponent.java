@@ -1,7 +1,5 @@
 package raven.swing.blur.util;
 
-import com.formdev.flatlaf.ui.FlatUIUtils;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -18,6 +16,8 @@ public class BlurComponent extends JComponent {
         FontMetrics fm = g.getFontMetrics();
         String text = "Paint count : " + paintCount;
         Rectangle2D rec = fm.getStringBounds(text, g);
-        g.drawString(text, (int) (getWidth() - rec.getWidth() - 5), fm.getAscent());
+        Graphics2D g2=(Graphics2D)g.create();
+        g2.drawString(text, (int) (getWidth() - rec.getWidth() - 5), fm.getAscent());
+        g2.dispose();
     }
 }

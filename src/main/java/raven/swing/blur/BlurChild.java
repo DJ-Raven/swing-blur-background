@@ -1,5 +1,6 @@
 package raven.swing.blur;
 
+import raven.swing.blur.style.Style;
 import raven.swing.blur.util.BlurComponent;
 
 import javax.swing.*;
@@ -7,8 +8,15 @@ import java.awt.*;
 
 public class BlurChild extends BlurComponent implements BlurChildData {
 
+    private Style style;
+
     public BlurChild() {
         init();
+    }
+
+    public BlurChild(Style style) {
+        this();
+        this.style = style;
     }
 
     private void init() {
@@ -17,17 +25,24 @@ public class BlurChild extends BlurComponent implements BlurChildData {
 
     @Override
     protected void paintComponent(Graphics g) {
+        // paint background
+        // g.setColor(new Color(182, 180, 180));
+        // g.fillRect(0, 0, getWidth(), getHeight());
+
         BlurData data = getBlurData(this);
         if (data != null) {
-            Rectangle rec = getBounds();
-            rec = SwingUtilities.convertRectangle(getParent(), rec, data.getSource());
+            Rectangle bound = getBounds();
+            Rectangle rec = SwingUtilities.convertRectangle(getParent(), bound, data.getSource());
+            Shape shape = style == null ? rec : style.getBorder() == null ? rec : style.getBorder().createShape(rec);
             int x = rec.x >= 0 ? 0 : rec.x * -1;
             int y = rec.y >= 0 ? 0 : rec.y * -1;
-            g.drawImage(data.getBlurImageAt(rec), x, y, null);
-
-            // test
-            g.setColor(new Color(225, 210, 194));
-            g.drawRect(0, 0, getWidth() - 1, getHeight() - 1);
+            Image image = data.getBlurImageAt(shape);
+            if (image != null) {
+                g.drawImage(image, x, y, null);
+            }
+            if (style != null) {
+                style.paint(this, g);
+            }
         }
         super.paintComponent(g);
     }

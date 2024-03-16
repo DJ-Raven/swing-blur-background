@@ -2,7 +2,6 @@ package raven.swing.blur.demo;
 
 import com.formdev.flatlaf.fonts.roboto.FlatRobotoFont;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
-import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.MigLayout;
 import raven.swing.blur.BlurBackground;
@@ -19,7 +18,7 @@ public class Demo extends JFrame {
         setLocationRelativeTo(null);
 
         BlurBackground background = new BlurBackground(new ImageIcon(getClass().getResource("/raven/swing/blur/background.jpg")).getImage());
-        background.setBlur(5f);
+        background.setBlur(10f);
 
         background.setLayout(new MigLayout("insets 20 50 20 50"));
 

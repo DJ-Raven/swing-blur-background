@@ -3,11 +3,15 @@ package raven.swing.blur.demo;
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import raven.swing.blur.BlurChild;
+import raven.swing.blur.style.GradientColor;
+import raven.swing.blur.style.Style;
+import raven.swing.blur.style.StyleBorder;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
+import java.awt.geom.Point2D;
 import java.util.Random;
 
 public class PanelItem extends BlurChild {
@@ -17,6 +21,15 @@ public class PanelItem extends BlurChild {
 
 
     public PanelItem() {
+        super(new Style()
+                .setBorder(new StyleBorder(30, 10, 10, 30)
+                        .setBorderWidth(3)
+                        .setBorderColor(new GradientColor(
+                                Color.decode("#DDB903"),
+                                Color.decode("#0398DD"),
+                                new Point2D.Float(0, 0),
+                                new Point2D.Float(1, 0))))
+        );
         init();
     }
 

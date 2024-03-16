@@ -6,6 +6,7 @@ import raven.swing.blur.util.BlurComponent;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
@@ -98,7 +99,13 @@ public class BlurBackground extends BlurComponent implements BlurData {
         BufferedImage buffImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = buffImage.createGraphics();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        Rectangle rec = shape.getBounds();
+        AffineTransform oldTran = g2.getTransform();
+        double x = rec.getX() < 0 ? 0 : -rec.getX();
+        double y = rec.getY() < 0 ? 0 : -rec.getY();
+        g2.translate(x, y);
         g2.fill(shape);
+        g2.setTransform(oldTran);
         g2.setComposite(outline ? AlphaComposite.DstAtop : AlphaComposite.SrcIn);
         g2.drawImage(image, 0, 0, null);
         g2.dispose();
