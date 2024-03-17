@@ -2,6 +2,7 @@ package raven.swing.blur;
 
 import com.formdev.flatlaf.util.UIScale;
 import com.twelvemonkeys.image.ImageUtil;
+import raven.swing.blur.style.StyleOverlay;
 import raven.swing.blur.util.BlurComponent;
 
 import javax.swing.*;
@@ -12,12 +13,10 @@ import java.awt.image.BufferedImage;
 
 public class BlurBackground extends BlurComponent implements BlurData {
 
-    private BufferedImage buffImage;
-    private BufferedImage blurImage;
     private Image image;
     private float blur;
-    private Color colorOverlay;
-    private float colorOverlayOpacity = 0.5f;
+
+    private StyleOverlay overlay;
 
     private int oldWidth;
     private int oldHeight;
@@ -139,12 +138,9 @@ public class BlurBackground extends BlurComponent implements BlurData {
             Rectangle rectangle = getAutoSize(new Dimension(width, height), new Dimension(imgWidth, imgHeight));
             Image newImage = new ImageIcon(image.getScaledInstance(rectangle.width, rectangle.height, Image.SCALE_SMOOTH)).getImage();
             g2.drawImage(newImage, rectangle.x, rectangle.y, null);
-            if (colorOverlay != null && colorOverlayOpacity > 0) {
-                g2.setColor(colorOverlay);
-                if (colorOverlayOpacity < 1f) {
-                    g2.setComposite(AlphaComposite.SrcOver.derive(Math.min(colorOverlayOpacity, 1f)));
-                }
-                g2.fill(new Rectangle2D.Double(0, 0, width, height));
+            Shape shape = new Rectangle2D.Double(0, 0, width, height);
+            if (overlay != null && overlay.getOpacity() > 0) {
+                overlay.paint(this, g2, shape);
             }
             g2.dispose();
             createBlurImage();
@@ -198,26 +194,14 @@ public class BlurBackground extends BlurComponent implements BlurData {
         }
     }
 
-    public Color getColorOverlay() {
-        return colorOverlay;
+    public StyleOverlay getOverlay() {
+        return overlay;
     }
 
-    public void setColorOverlay(Color colorOverlay) {
-        this.colorOverlay = colorOverlay;
-        buffImage = null;
+    public void setOverlay(StyleOverlay overlay) {
+        this.overlay = overlay;
+        this.buffImage = null;
         repaint();
-    }
-
-    public float getColorOverlayOpacity() {
-        return colorOverlayOpacity;
-    }
-
-    public void setColorOverlayOpacity(float colorOverlayOpacity) {
-        if (this.colorOverlayOpacity != colorOverlayOpacity) {
-            this.colorOverlayOpacity = colorOverlayOpacity;
-            buffImage = null;
-            repaint();
-        }
     }
 
     public Image getImage() {

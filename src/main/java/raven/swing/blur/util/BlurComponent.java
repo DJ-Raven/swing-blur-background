@@ -3,8 +3,12 @@ package raven.swing.blur.util;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
 public class BlurComponent extends JComponent {
+
+    protected BufferedImage buffImage;
+    protected BufferedImage blurImage;
 
     private int paintCount = 0;
 

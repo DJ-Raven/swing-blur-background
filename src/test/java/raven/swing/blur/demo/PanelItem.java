@@ -24,27 +24,28 @@ public class PanelItem extends BlurChild {
     public PanelItem() {
         super(new Style()
                 .setBorder(new StyleBorder(50, 30, 30, 50)
-                        .setBorderWidth(5)
+                        .setBorderWidth(2)
+                        .setOpacity(0.5f)
                         .setBorderColor(new GradientColor(
-                                Color.decode("#DDB903"),
-                                Color.decode("#0398DD"),
+                                Color.decode("#009FFF"),
+                                Color.decode("#ec2F4B"),
                                 new Point2D.Float(0, 0),
-                                new Point2D.Float(1, 0)
+                                new Point2D.Float(1, 1)
                         ))
                 )
                 .setOverlay(new StyleOverlay(
                         new GradientColor(
-                                Color.decode("#DDB903"),
-                                Color.decode("#0398DD"),
+                                Color.decode("#757F9A"),
+                                Color.decode("#D7DDE8"),
                                 new Point2D.Float(0, 0),
-                                new Point2D.Float(1,1)
-                        ), 0.2f))
+                                new Point2D.Float(1, 1)
+                        ), 0.1f))
         );
         init();
     }
 
     private void init() {
-        setLayout(new MigLayout("al center center"));
+        setLayout(new MigLayout("wrap,al center center", "[center]"));
         JLabel label = new JLabel("Move me");
         label.putClientProperty(FlatClientProperties.STYLE, "" +
                 "font:bold +5");

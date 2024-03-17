@@ -5,10 +5,13 @@ import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.util.UIScale;
 import net.miginfocom.swing.MigLayout;
 import raven.swing.blur.BlurBackground;
+import raven.swing.blur.style.GradientColor;
+import raven.swing.blur.style.StyleOverlay;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.geom.Point2D;
 
 public class Demo extends JFrame {
 
@@ -18,7 +21,13 @@ public class Demo extends JFrame {
         setLocationRelativeTo(null);
 
         BlurBackground background = new BlurBackground(new ImageIcon(getClass().getResource("/raven/swing/blur/background.jpg")).getImage());
-        background.setBlur(10f);
+        background.setBlur(20f);
+        background.setOverlay(new StyleOverlay(new GradientColor(
+                Color.decode("#000000"),
+                Color.decode("#2B5A68"),
+                new Point2D.Float(0f, 0f),
+                new Point2D.Float(1f, 0f)
+        ), 0.4f));
 
         background.setLayout(new MigLayout("insets 20 50 20 50"));
 
@@ -28,7 +37,7 @@ public class Demo extends JFrame {
         simplePanel1.setOpaque(false);
 
 
-        JPanel simplePanel2 = new JPanel(new MigLayout());
+        JPanel simplePanel2 = new JPanel(new MigLayout("al center center"));
         simplePanel2.add(new JLabel("Simple Panel 2"), "pos 0 0");
         simplePanel2.setBorder(new LineBorder(new Color(243, 57, 57)));
         simplePanel2.setOpaque(false);
@@ -42,7 +51,7 @@ public class Demo extends JFrame {
 
     public static void main(String[] args) {
         FlatRobotoFont.install();
-        // System.setProperty("flatlaf.uiScale", "0.8f");
+       // System.setProperty("flatlaf.uiScale", "1.5f");
         FlatMacDarkLaf.setup();
         EventQueue.invokeLater(() -> new Demo().setVisible(true));
     }

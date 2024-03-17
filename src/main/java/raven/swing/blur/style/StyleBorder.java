@@ -15,6 +15,7 @@ public class StyleBorder implements StylePaint {
     private float borderWidth;
 
     private StylePaint borderColor;
+    private float opacity = 1f;
 
     public StyleBorder(float arc) {
         arcTopLeft = arcTopRight = arcBottomLeft = arcBottomRight = arc;
@@ -55,8 +56,17 @@ public class StyleBorder implements StylePaint {
         return this;
     }
 
+    public StyleBorder setOpacity(float opacity) {
+        this.opacity = opacity;
+        return this;
+    }
+
     public StylePaint getBorderColor() {
         return borderColor;
+    }
+
+    public float getOpacity() {
+        return opacity;
     }
 
     public float getBorderWidth() {
@@ -91,14 +101,19 @@ public class StyleBorder implements StylePaint {
 
     @Override
     public void paint(Component com, Graphics g, Shape shape) {
-        Graphics2D g2 = (Graphics2D) g.create();
-        FlatUIUtils.setRenderingHints(g2);
-        if (borderColor != null) {
-            borderColor.paint(com, g2, shape);
-        } else {
-            g2.setColor(new Color(114, 117, 114));
+        if (opacity > 0) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            FlatUIUtils.setRenderingHints(g2);
+            if (borderColor != null) {
+                borderColor.paint(com, g2, shape);
+            } else {
+                g2.setColor(new Color(114, 117, 114));
+            }
+            if (opacity < 1) {
+                g2.setComposite(AlphaComposite.SrcOver.derive(opacity));
+            }
+            g2.fill(createBorder(new Rectangle(com.getSize())));
+            g2.dispose();
         }
-        g2.fill(createBorder(new Rectangle(com.getSize())));
-        g2.dispose();
     }
 }
