@@ -3,6 +3,7 @@ package raven.swing.blur.style;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.UIScale;
 
+import javax.swing.*;
 import java.awt.*;
 
 public class StyleBorder implements StylePaint {
@@ -61,6 +62,11 @@ public class StyleBorder implements StylePaint {
         return this;
     }
 
+    public Insets getInsets() {
+        int width = (int) borderWidth;
+        return new Insets(width, width, width, width);
+    }
+
     public StylePaint getBorderColor() {
         return borderColor;
     }
@@ -101,6 +107,11 @@ public class StyleBorder implements StylePaint {
 
     @Override
     public void paint(Component com, Graphics g, Shape shape) {
+        if (com instanceof JComponent) {
+            if (((JComponent) com).getBorder() != null) {
+                return;
+            }
+        }
         if (opacity > 0) {
             Graphics2D g2 = (Graphics2D) g.create();
             FlatUIUtils.setRenderingHints(g2);

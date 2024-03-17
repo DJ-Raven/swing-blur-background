@@ -26,10 +26,6 @@ public class BlurChild extends BlurComponent implements BlurChildData {
 
     @Override
     protected void paintComponent(Graphics g) {
-        // paint background
-        // g.setColor(new Color(182, 180, 180));
-        // g.fillRect(0, 0, getWidth(), getHeight());
-
         BlurData data = getBlurData(this);
         if (data != null) {
             Rectangle bound = getBounds();
@@ -56,6 +52,14 @@ public class BlurChild extends BlurComponent implements BlurChildData {
             }
         }
         super.paintComponent(g);
+    }
+
+    @Override
+    public Insets getInsets() {
+        if (style != null && style.getBorder() != null) {
+            return style.getBorder().getInsets();
+        }
+        return super.getInsets();
     }
 
     private BlurData getBlurData(Component component) {

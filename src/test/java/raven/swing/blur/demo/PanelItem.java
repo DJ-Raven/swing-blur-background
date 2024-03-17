@@ -1,6 +1,8 @@
 package raven.swing.blur.demo;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import com.formdev.flatlaf.ui.FlatEmptyBorder;
+import com.formdev.flatlaf.ui.FlatLineBorder;
 import net.miginfocom.swing.MigLayout;
 import raven.swing.blur.BlurChild;
 import raven.swing.blur.style.GradientColor;
