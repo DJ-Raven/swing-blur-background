@@ -42,17 +42,17 @@ public class BlurBackground extends BlurComponent implements BlurData {
 
     @Override
     public BufferedImage getBlurImageAt(Shape shape) {
-        return getImage(blurImage, shape);
+        return getImage(blurImage, shape, false);
     }
 
     @Override
     public BufferedImage getImageAt(Shape shape) {
-        return getImage(buffImage, shape);
+        return getImage(buffImage, shape, false);
     }
 
     @Override
     public BufferedImage getOutlineImage(Shape shape) {
-        return null;
+        return getImage(buffImage, shape, true);
     }
 
     @Override
@@ -60,15 +60,15 @@ public class BlurBackground extends BlurComponent implements BlurData {
         return this;
     }
 
-    private BufferedImage getImage(BufferedImage image, Shape shape) {
+    private BufferedImage getImage(BufferedImage image, Shape shape, boolean outside) {
         if (shape instanceof Rectangle2D) {
             Rectangle rec = shape.getBounds();
             fixRectangle(rec, image);
             return image.getSubimage(rec.x, rec.y, rec.width, rec.height);
         }
         Rectangle rec = shape.getBounds();
-        BufferedImage recImage = getImage(image, rec);
-        return createShapeImage(recImage, shape, false);
+        BufferedImage recImage = getImage(image, rec, outside);
+        return createShapeImage(recImage, shape, outside);
     }
 
     private void fixRectangle(Rectangle rec, BufferedImage image) {
@@ -90,7 +90,7 @@ public class BlurBackground extends BlurComponent implements BlurData {
         }
     }
 
-    private BufferedImage createShapeImage(BufferedImage image, Shape shape, boolean outline) {
+    private BufferedImage createShapeImage(BufferedImage image, Shape shape, boolean outside) {
         int width = image.getWidth();
         int height = image.getHeight();
         if (width == 0 || height == 0) {
@@ -106,7 +106,7 @@ public class BlurBackground extends BlurComponent implements BlurData {
         g2.translate(x, y);
         g2.fill(shape);
         g2.setTransform(oldTran);
-        g2.setComposite(outline ? AlphaComposite.DstAtop : AlphaComposite.SrcIn);
+        g2.setComposite(outside ? AlphaComposite.DstAtop : AlphaComposite.SrcIn);
         g2.drawImage(image, 0, 0, null);
         g2.dispose();
         return buffImage;
@@ -114,6 +114,10 @@ public class BlurBackground extends BlurComponent implements BlurData {
 
     @Override
     protected void paintComponent(Graphics g) {
+        if (isOpaque()) {
+            g.setColor(getBackground());
+            g.fillRect(0, 0, getWidth(), getHeight());
+        }
         boolean paint = updateImage();
         if (paint) {
             g.drawImage(buffImage, 0, 0, null);

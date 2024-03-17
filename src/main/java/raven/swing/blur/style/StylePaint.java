@@ -4,5 +4,5 @@ import java.awt.*;
 
 public interface StylePaint {
 
-    void paint(Component com, Graphics g);
+    void paint(Component com, Graphics g, Shape shape);
 }

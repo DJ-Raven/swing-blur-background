@@ -6,6 +6,7 @@ import raven.swing.blur.BlurChild;
 import raven.swing.blur.style.GradientColor;
 import raven.swing.blur.style.Style;
 import raven.swing.blur.style.StyleBorder;
+import raven.swing.blur.style.StyleOverlay;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,13 +23,22 @@ public class PanelItem extends BlurChild {
 
     public PanelItem() {
         super(new Style()
-                .setBorder(new StyleBorder(30, 10, 10, 30)
-                        .setBorderWidth(3)
+                .setBorder(new StyleBorder(50, 30, 30, 50)
+                        .setBorderWidth(5)
                         .setBorderColor(new GradientColor(
                                 Color.decode("#DDB903"),
                                 Color.decode("#0398DD"),
                                 new Point2D.Float(0, 0),
-                                new Point2D.Float(1, 0))))
+                                new Point2D.Float(1, 0)
+                        ))
+                )
+                .setOverlay(new StyleOverlay(
+                        new GradientColor(
+                                Color.decode("#DDB903"),
+                                Color.decode("#0398DD"),
+                                new Point2D.Float(0, 0),
+                                new Point2D.Float(1,1)
+                        ), 0.2f))
         );
         init();
     }
@@ -40,7 +50,7 @@ public class PanelItem extends BlurChild {
                 "font:bold +5");
         add(label);
         add(new JTextField());
-        JButton button = new JButton("Click me");
+        JButton button = new JButton("Random Text");
         button.addActionListener(e -> {
             Random ran = new Random();
             label.setText("Move me " + ran.nextInt(999));

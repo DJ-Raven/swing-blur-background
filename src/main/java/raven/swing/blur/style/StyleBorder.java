@@ -55,6 +55,14 @@ public class StyleBorder implements StylePaint {
         return this;
     }
 
+    public StylePaint getBorderColor() {
+        return borderColor;
+    }
+
+    public float getBorderWidth() {
+        return borderWidth;
+    }
+
     public Shape createShape(Rectangle rec) {
         if (arcTopLeft == 0 && arcTopRight == 0 && arcBottomLeft == 0 && arcBottomRight == 0) {
             return rec;
@@ -69,31 +77,28 @@ public class StyleBorder implements StylePaint {
 
     public Shape createBorder(Rectangle rec) {
         if (arcTopLeft == 0 && arcTopRight == 0 && arcBottomLeft == 0 && arcBottomRight == 0) {
-            return rec;
+            float border = UIScale.scale(borderWidth);
+            return FlatUIUtils.createRoundRectangle(rec.x, rec.y, rec.width, rec.height, border, 0, 0, 0, 0);
         } else {
             float border = UIScale.scale(borderWidth);
             float topLeft = UIScale.scale(arcTopLeft);
             float topRight = UIScale.scale(arcTopRight);
             float bottomLeft = UIScale.scale(arcBottomLeft);
             float bottomRight = UIScale.scale(arcBottomRight);
-            return FlatUIUtils.createRoundRectangle(rec.x, rec.y, rec.width, rec.width, border, topLeft, topRight, bottomLeft, bottomRight);
+            return FlatUIUtils.createRoundRectangle(rec.x, rec.y, rec.width, rec.height, border, topLeft, topRight, bottomLeft, bottomRight);
         }
     }
 
     @Override
-    public void paint(Component com, Graphics g) {
+    public void paint(Component com, Graphics g, Shape shape) {
         Graphics2D g2 = (Graphics2D) g.create();
         FlatUIUtils.setRenderingHints(g2);
-        Rectangle bound = com.getBounds();
-        double bx = -bound.getX();
-        double by = -bound.getY();
         if (borderColor != null) {
-            borderColor.paint(com, g2);
+            borderColor.paint(com, g2, shape);
         } else {
             g2.setColor(new Color(114, 117, 114));
         }
-        g2.translate(bx, by);
-        g2.fill(createBorder(bound));
+        g2.fill(createBorder(new Rectangle(com.getSize())));
         g2.dispose();
     }
 }

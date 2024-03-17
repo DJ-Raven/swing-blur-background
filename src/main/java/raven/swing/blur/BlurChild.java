@@ -5,6 +5,7 @@ import raven.swing.blur.util.BlurComponent;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Rectangle2D;
 
 public class BlurChild extends BlurComponent implements BlurChildData {
 
@@ -36,12 +37,22 @@ public class BlurChild extends BlurComponent implements BlurChildData {
             Shape shape = style == null ? rec : style.getBorder() == null ? rec : style.getBorder().createShape(rec);
             int x = rec.x >= 0 ? 0 : rec.x * -1;
             int y = rec.y >= 0 ? 0 : rec.y * -1;
+
+            //  create outside background image
+            if (!(shape instanceof Rectangle2D)) {
+                Image image = data.getImageAt(rec);
+                if (image != null) {
+                    g.drawImage(image, x, y, null);
+                }
+            }
+
             Image image = data.getBlurImageAt(shape);
             if (image != null) {
                 g.drawImage(image, x, y, null);
             }
             if (style != null) {
-                style.paint(this, g);
+                Shape defaultShape = style == null ? rec : style.getBorder() == null ? rec : style.getBorder().createShape(new Rectangle(bound.getSize()));
+                style.paint(this, g, defaultShape);
             }
         }
         super.paintComponent(g);
