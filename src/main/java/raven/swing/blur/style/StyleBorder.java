@@ -67,6 +67,10 @@ public class StyleBorder implements StylePaint {
         return new Insets(width, width, width, width);
     }
 
+    public boolean isRectangle() {
+        return arcTopLeft == 0 && arcTopRight == 0 && arcBottomLeft == 0 && arcBottomRight == 0;
+    }
+
     public StylePaint getBorderColor() {
         return borderColor;
     }

@@ -2,14 +2,16 @@ package raven.swing.blur;
 
 import raven.swing.blur.style.Style;
 import raven.swing.blur.util.BlurComponent;
+import raven.swing.blur.util.Utils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 
 public class BlurChild extends BlurComponent implements BlurChildData {
 
     private Style style;
+    private BufferedImage buffImage;
 
     public BlurChild() {
         init();
@@ -22,35 +24,69 @@ public class BlurChild extends BlurComponent implements BlurChildData {
 
     private void init() {
         setOpaque(true);
+        installMouseMove();
+    }
+
+    @Override
+    public BufferedImage getImageAt(Shape shape) {
+        if (buffImage == null) {
+            return null;
+        }
+        Rectangle rec = shape.getBounds();
+        Utils.fixRectangle(rec, buffImage);
+        return buffImage.getSubimage(rec.x, rec.y, rec.width, rec.height);
+    }
+
+    @Override
+    public Style getStyle() {
+        return style;
+    }
+
+    @Override
+    public Component getSource() {
+        return this;
     }
 
     @Override
     protected void paintComponent(Graphics g) {
-        BlurData data = getBlurData(this);
-        if (data != null) {
-            Rectangle bound = getBounds();
-            Rectangle rec = SwingUtilities.convertRectangle(getParent(), bound, data.getSource());
-            Shape shape = style == null ? rec : style.getBorder() == null ? rec : style.getBorder().createShape(rec);
+        BufferedImage paintImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = paintImage.createGraphics();
+        Rectangle bound = getBounds();
+        boolean isRec = isRectangle();
+        float blur = style.getBlur();
+        // create background image
+        BlurChildData blurChildData = getBlurChildData(this);
+        if (!isRec && isOpaque()) {
+            Rectangle rec = SwingUtilities.convertRectangle(getParent(), bound, blurChildData.getSource());
             int x = rec.x >= 0 ? 0 : rec.x * -1;
             int y = rec.y >= 0 ? 0 : rec.y * -1;
 
-            //  create outside background image
-            if (!(shape instanceof Rectangle2D)) {
-                Image image = data.getImageAt(rec);
-                if (image != null) {
-                    g.drawImage(image, x, y, null);
-                }
-            }
-
-            Image image = data.getBlurImageAt(shape, style.getBlur());
+            Image image = blurChildData.getImageAt(rec);
             if (image != null) {
-                g.drawImage(image, x, y, null);
+                g2.drawImage(image, x, y, null);
+            }
+        }
+        if (blurChildData.getStyle() != null) {
+            blur += blurChildData.getStyle().getBlur();
+        }
+        BlurData blurData = getBlurData(this);
+        if (blurData != null) {
+            Rectangle rec = SwingUtilities.convertRectangle(getParent(), bound, blurData.getSource());
+            Shape shape = style == null ? rec : style.getBorder() == null ? rec : style.getBorder().createShape(rec);
+            Image image = blurData.getBlurImageAt(shape, blur);
+            int x = rec.x >= 0 ? 0 : rec.x * -1;
+            int y = rec.y >= 0 ? 0 : rec.y * -1;
+            if (image != null) {
+                g2.drawImage(image, x, y, null);
             }
             if (style != null) {
                 Shape defaultShape = style == null ? rec : style.getBorder() == null ? rec : style.getBorder().createShape(new Rectangle(bound.getSize()));
-                style.paint(this, g, defaultShape);
+                style.paint(this, g2, defaultShape);
             }
         }
+        g2.dispose();
+        g.drawImage(paintImage, 0, 0, null);
+        buffImage = paintImage;
         super.paintComponent(g);
     }
 
@@ -62,12 +98,28 @@ public class BlurChild extends BlurComponent implements BlurChildData {
         return super.getInsets();
     }
 
+    private boolean isRectangle() {
+        return style == null || style.getBorder() == null || style.getBorder().isRectangle();
+    }
+
     private BlurData getBlurData(Component component) {
         if (component.getParent() != null) {
             if (component.getParent() instanceof BlurData) {
                 return (BlurData) component.getParent();
             } else {
                 return getBlurData(component.getParent());
+            }
+        } else {
+            return null;
+        }
+    }
+
+    private BlurChildData getBlurChildData(Component component) {
+        if (component.getParent() != null) {
+            if (component.getParent() instanceof BlurChildData) {
+                return (BlurChildData) component.getParent();
+            } else {
+                return getBlurChildData(component.getParent());
             }
         } else {
             return null;

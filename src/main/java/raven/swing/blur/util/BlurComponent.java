@@ -17,6 +17,9 @@ public class BlurComponent extends JComponent {
 
     private void init() {
         setOpaque(true);
+    }
+
+    public void installMouseMove() {
         MouseAdapter mouseAdapter = new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {

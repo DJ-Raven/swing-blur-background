@@ -2,8 +2,10 @@ package raven.swing.blur;
 
 import com.formdev.flatlaf.util.UIScale;
 import com.twelvemonkeys.image.ImageUtil;
+import raven.swing.blur.style.Style;
 import raven.swing.blur.style.StyleOverlay;
 import raven.swing.blur.util.BlurComponent;
+import raven.swing.blur.util.Utils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -68,6 +70,11 @@ public class BlurBackground extends BlurComponent implements BlurData {
     }
 
     @Override
+    public Style getStyle() {
+        return null;
+    }
+
+    @Override
     public Component getSource() {
         return this;
     }
@@ -75,31 +82,12 @@ public class BlurBackground extends BlurComponent implements BlurData {
     private BufferedImage getImage(BufferedImage image, Shape shape) {
         if (shape instanceof Rectangle2D) {
             Rectangle rec = shape.getBounds();
-            fixRectangle(rec, image);
+            Utils.fixRectangle(rec, image);
             return image.getSubimage(rec.x, rec.y, rec.width, rec.height);
         }
         Rectangle rec = shape.getBounds();
         BufferedImage recImage = getImage(image, rec);
         return createShapeImage(recImage, shape);
-    }
-
-    private void fixRectangle(Rectangle rec, BufferedImage image) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-        if (rec.x < 0) {
-            rec.width += rec.x;
-            rec.x = 0;
-        }
-        if (rec.y < 0) {
-            rec.height += rec.y;
-            rec.y = 0;
-        }
-        if (rec.x + rec.width > width) {
-            rec.width = width - rec.x;
-        }
-        if (rec.y + rec.height > height) {
-            rec.height = height - rec.y;
-        }
     }
 
     private BufferedImage createShapeImage(BufferedImage image, Shape shape) {
