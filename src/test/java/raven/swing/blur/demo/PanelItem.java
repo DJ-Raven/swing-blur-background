@@ -18,20 +18,20 @@ public class PanelItem extends BlurChild {
     public PanelItem() {
         super(new Style()
                 .setBlur(20f)
-                .setBorder(new StyleBorder(50, 30, 30, 50)
-                        .setBorderWidth(2)
-                        .setOpacity(0.5f)
+                .setBorder(new StyleBorder(20)
+                        .setBorderWidth(1.5f)
+                        .setOpacity(0.1f)
                         .setBorderColor(new GradientColor(
-                                Color.decode("#009FFF"),
-                                Color.decode("#ec2F4B"),
+                                Color.decode("#C9D6FF"),
+                                Color.decode("#E2E2E2"),
                                 new Point2D.Float(0, 0),
                                 new Point2D.Float(1, 1)
                         ))
                 )
                 .setOverlay(new StyleOverlay(
                         new GradientColor(
-                                Color.decode("#757F9A"),
-                                Color.decode("#D7DDE8"),
+                                Color.decode("#C9D6FF"),
+                                Color.decode("#E2E2E2"),
                                 new Point2D.Float(0, 0),
                                 new Point2D.Float(1, 1)
                         ), 0.1f))
@@ -52,6 +52,6 @@ public class PanelItem extends BlurChild {
             label.setText("Move me " + ran.nextInt(999));
         });
         add(button);
-        add(new SubPanelItem(), "width 200,height 150",0);
+        add(new SubPanelItem(), "width 200,height 150", 0);
     }
 }

@@ -16,22 +16,22 @@ public class SubPanelItem extends BlurChild {
         super(new Style()
                 .setBlur(10)
                 .setBorder(new StyleBorder(30, 30, 30, 30)
-                        .setBorderWidth(1)
-                        .setOpacity(0.8f)
+                        .setBorderWidth(1.5f)
+                        .setOpacity(0.1f)
                         .setBorderColor(new GradientColor(
-                                Color.decode("#141E30"),
-                                Color.decode("#243B55"),
+                                Color.decode("#C9D6FF"),
+                                Color.decode("#E2E2E2"),
                                 new Point2D.Float(0, 0),
                                 new Point2D.Float(1, 1)
                         ))
                 )
                 .setOverlay(new StyleOverlay(
                         new GradientColor(
-                                Color.decode("#141E30"),
-                                Color.decode("#243B55"),
+                                Color.decode("#C9D6FF"),
+                                Color.decode("#E2E2E2"),
                                 new Point2D.Float(0, 0),
                                 new Point2D.Float(1, 1)
-                        ), 0.1f))
+                        ), 0.3f))
         );
         init();
     }
