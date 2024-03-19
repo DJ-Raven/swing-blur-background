@@ -4,10 +4,16 @@ import java.awt.*;
 
 public class Style implements StylePaint {
 
+    private float blur;
     private StyleBorder border;
     private StyleOverlay overlay;
 
     public Style() {
+    }
+
+    public Style setBlur(float blur) {
+        this.blur = blur;
+        return this;
     }
 
     public Style setBorder(StyleBorder style) {
@@ -18,6 +24,10 @@ public class Style implements StylePaint {
     public Style setOverlay(StyleOverlay style) {
         this.overlay = style;
         return this;
+    }
+
+    public float getBlur() {
+        return blur;
     }
 
     public StyleBorder getBorder() {

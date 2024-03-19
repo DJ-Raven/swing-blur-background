@@ -87,7 +87,7 @@ public class StyleBorder implements StylePaint {
             float topRight = UIScale.scale(arcTopRight);
             float bottomLeft = UIScale.scale(arcBottomLeft);
             float bottomRight = UIScale.scale(arcBottomRight);
-            return FlatUIUtils.createRoundRectanglePath(rec.x, rec.y, rec.width, rec.width, topLeft, topRight, bottomLeft, bottomRight);
+            return FlatUIUtils.createRoundRectanglePath(rec.x, rec.y, rec.width, rec.height, topLeft, topRight, bottomLeft, bottomRight);
         }
     }
 

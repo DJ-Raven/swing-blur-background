@@ -42,7 +42,7 @@ public class BlurChild extends BlurComponent implements BlurChildData {
                 }
             }
 
-            Image image = data.getBlurImageAt(shape);
+            Image image = data.getBlurImageAt(shape, style.getBlur());
             if (image != null) {
                 g.drawImage(image, x, y, null);
             }

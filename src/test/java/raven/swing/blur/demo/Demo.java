@@ -21,7 +21,6 @@ public class Demo extends JFrame {
         setLocationRelativeTo(null);
 
         BlurBackground background = new BlurBackground(new ImageIcon(getClass().getResource("/raven/swing/blur/background.jpg")).getImage());
-        background.setBlur(20f);
         background.setOverlay(new StyleOverlay(new GradientColor(
                 Color.decode("#000000"),
                 Color.decode("#2B5A68"),
@@ -42,7 +41,7 @@ public class Demo extends JFrame {
         simplePanel2.setBorder(new LineBorder(new Color(243, 57, 57)));
         simplePanel2.setOpaque(false);
 
-        simplePanel2.add(new PanelItem(), "width 300, height 300");
+        simplePanel2.add(new PanelItem(), "width 300, height 250");
 
         background.add(simplePanel1, "width 100%,height 100%");
         simplePanel1.add(simplePanel2, "width 100%,height 100%");

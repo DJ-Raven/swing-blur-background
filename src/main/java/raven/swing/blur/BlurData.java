@@ -5,11 +5,9 @@ import java.awt.image.BufferedImage;
 
 public interface BlurData {
 
-    BufferedImage getBlurImageAt(Shape shape);
+    BufferedImage getBlurImageAt(Shape shape, float blur);
 
     BufferedImage getImageAt(Shape shape);
-
-    BufferedImage getOutlineImage(Shape shape);
 
     Component getSource();
 }

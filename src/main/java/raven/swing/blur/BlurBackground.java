@@ -10,11 +10,14 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BlurBackground extends BlurComponent implements BlurData {
 
     private Image image;
-    private float blur;
+    protected BufferedImage buffImage;
+    protected Map<Float, BufferedImage> blurImages;
 
     private StyleOverlay overlay;
 
@@ -36,22 +39,32 @@ public class BlurBackground extends BlurComponent implements BlurData {
     }
 
     private void init() {
+        blurImages = new HashMap<>();
         setOpaque(true);
     }
 
     @Override
-    public BufferedImage getBlurImageAt(Shape shape) {
-        return getImage(blurImage, shape, false);
+    public BufferedImage getBlurImageAt(Shape shape, float blur) {
+        if (blur > 0) {
+            BufferedImage blurImage;
+            if (blurImages.containsKey(blur)) {
+                blurImage = blurImages.get(blur);
+            } else {
+                if (buffImage == null) {
+                    return null;
+                }
+                blurImage = createBlurImage(buffImage, blur);
+                blurImages.put(blur, blurImage);
+            }
+            return getImage(blurImage, shape);
+        } else {
+            return getImageAt(shape);
+        }
     }
 
     @Override
     public BufferedImage getImageAt(Shape shape) {
-        return getImage(buffImage, shape, false);
-    }
-
-    @Override
-    public BufferedImage getOutlineImage(Shape shape) {
-        return getImage(buffImage, shape, true);
+        return getImage(buffImage, shape);
     }
 
     @Override
@@ -59,15 +72,15 @@ public class BlurBackground extends BlurComponent implements BlurData {
         return this;
     }
 
-    private BufferedImage getImage(BufferedImage image, Shape shape, boolean outside) {
+    private BufferedImage getImage(BufferedImage image, Shape shape) {
         if (shape instanceof Rectangle2D) {
             Rectangle rec = shape.getBounds();
             fixRectangle(rec, image);
             return image.getSubimage(rec.x, rec.y, rec.width, rec.height);
         }
         Rectangle rec = shape.getBounds();
-        BufferedImage recImage = getImage(image, rec, outside);
-        return createShapeImage(recImage, shape, outside);
+        BufferedImage recImage = getImage(image, rec);
+        return createShapeImage(recImage, shape);
     }
 
     private void fixRectangle(Rectangle rec, BufferedImage image) {
@@ -89,7 +102,7 @@ public class BlurBackground extends BlurComponent implements BlurData {
         }
     }
 
-    private BufferedImage createShapeImage(BufferedImage image, Shape shape, boolean outside) {
+    private BufferedImage createShapeImage(BufferedImage image, Shape shape) {
         int width = image.getWidth();
         int height = image.getHeight();
         if (width == 0 || height == 0) {
@@ -105,7 +118,7 @@ public class BlurBackground extends BlurComponent implements BlurData {
         g2.translate(x, y);
         g2.fill(shape);
         g2.setTransform(oldTran);
-        g2.setComposite(outside ? AlphaComposite.DstAtop : AlphaComposite.SrcIn);
+        g2.setComposite(AlphaComposite.SrcIn);
         g2.drawImage(image, 0, 0, null);
         g2.dispose();
         return buffImage;
@@ -143,17 +156,15 @@ public class BlurBackground extends BlurComponent implements BlurData {
                 overlay.paint(this, g2, shape);
             }
             g2.dispose();
-            createBlurImage();
             oldWidth = width;
             oldHeight = height;
+            blurImages.clear();
         }
         return true;
     }
 
-    private void createBlurImage() {
-        if (buffImage != null) {
-            blurImage = ImageUtil.blur(buffImage, UIScale.scale(blur));
-        }
+    private BufferedImage createBlurImage(BufferedImage image, float blur) {
+        return ImageUtil.blur(image, UIScale.scale(blur));
     }
 
     private Rectangle getAutoSize(Dimension size, Dimension target) {
@@ -180,18 +191,6 @@ public class BlurBackground extends BlurComponent implements BlurData {
 
     public BlurData getBlurData() {
         return this;
-    }
-
-    public float getBlur() {
-        return blur;
-    }
-
-    public void setBlur(float blur) {
-        if (this.blur != blur) {
-            this.blur = blur;
-            buffImage = null;
-            repaint();
-        }
     }
 
     public StyleOverlay getOverlay() {
