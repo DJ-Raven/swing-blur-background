@@ -24,7 +24,7 @@ public class BlurChild extends BlurComponent implements BlurChildData {
 
     private void init() {
         setOpaque(true);
-        installMouseMove();
+    //    installMouseMove();
     }
 
     @Override
