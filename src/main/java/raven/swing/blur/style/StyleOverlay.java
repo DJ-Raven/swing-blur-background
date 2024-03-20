@@ -1,6 +1,7 @@
 package raven.swing.blur.style;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
+import raven.swing.blur.util.StyleShape;
 
 import java.awt.*;
 
@@ -28,14 +29,14 @@ public class StyleOverlay implements StylePaint {
     }
 
     @Override
-    public void paint(Component com, Graphics g, Shape shape) {
+    public void paint(Component com, Graphics g, StyleShape shape) {
         Graphics2D g2 = (Graphics2D) g.create();
         color.paint(com, g2, shape);
         FlatUIUtils.setRenderingHints(g2);
         if (opacity < 1) {
             g2.setComposite(AlphaComposite.SrcOver.derive(opacity));
         }
-        g2.fill(shape);
+        g2.fill(shape.getShape());
         g2.dispose();
     }
 }

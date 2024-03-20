@@ -1,5 +1,7 @@
 package raven.swing.blur.style;
 
+import raven.swing.blur.util.StyleShape;
+
 import java.awt.*;
 
 public class Style implements StylePaint {
@@ -39,7 +41,7 @@ public class Style implements StylePaint {
     }
 
     @Override
-    public void paint(Component com, Graphics g, Shape shape) {
+    public void paint(Component com, Graphics g, StyleShape shape) {
         if (overlay != null && overlay.getOpacity() > 0f) {
             overlay.paint(com, g, shape);
         }

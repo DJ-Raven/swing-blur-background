@@ -3,6 +3,7 @@ package raven.swing.blur;
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import raven.swing.blur.style.Style;
 import raven.swing.blur.util.BlurComponent;
+import raven.swing.blur.util.StyleShape;
 import raven.swing.blur.util.Utils;
 
 import javax.swing.*;
@@ -91,7 +92,7 @@ public class BlurChild extends BlurComponent implements BlurChildData {
                     r = FlatUIUtils.subtractInsets(new Rectangle(bound.getSize()), style.getBorder().getDropShadow().getInsets());
                 }
                 Shape defaultShape = style.getBorder() == null ? r : style.getBorder().createShape(r);
-                style.paint(this, g2, defaultShape);
+                style.paint(this, g2, new StyleShape(defaultShape,style));
             }
         }
         g2.dispose();

@@ -2,6 +2,7 @@ package raven.swing.blur.style;
 
 import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.UIScale;
+import raven.swing.blur.util.StyleShape;
 
 import javax.swing.*;
 import java.awt.*;
@@ -121,7 +122,7 @@ public class StyleBorder implements StylePaint {
     }
 
     @Override
-    public void paint(Component com, Graphics g, Shape shape) {
+    public void paint(Component com, Graphics g, StyleShape shape) {
         if (com instanceof JComponent) {
             if (((JComponent) com).getBorder() != null) {
                 return;
@@ -143,7 +144,7 @@ public class StyleBorder implements StylePaint {
             if (opacity < 1) {
                 g2.setComposite(AlphaComposite.SrcOver.derive(opacity));
             }
-            g2.fill(createBorder(shape.getBounds()));
+            g2.fill(createBorder(shape.getShape().getBounds()));
             g2.dispose();
         }
     }

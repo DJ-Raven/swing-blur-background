@@ -5,6 +5,7 @@ import com.twelvemonkeys.image.ImageUtil;
 import raven.swing.blur.style.Style;
 import raven.swing.blur.style.StyleOverlay;
 import raven.swing.blur.util.BlurComponent;
+import raven.swing.blur.util.StyleShape;
 import raven.swing.blur.util.Utils;
 
 import javax.swing.*;
@@ -141,7 +142,7 @@ public class BlurBackground extends BlurComponent implements BlurData {
             g2.drawImage(newImage, rectangle.x, rectangle.y, null);
             Shape shape = new Rectangle2D.Double(0, 0, width, height);
             if (overlay != null && overlay.getOpacity() > 0) {
-                overlay.paint(this, g2, shape);
+                overlay.paint(this, g2, new StyleShape(shape));
             }
             g2.dispose();
             oldWidth = width;

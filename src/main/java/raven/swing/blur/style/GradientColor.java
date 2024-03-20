@@ -1,5 +1,7 @@
 package raven.swing.blur.style;
 
+import raven.swing.blur.util.StyleShape;
+
 import java.awt.*;
 import java.awt.geom.Point2D;
 
@@ -52,7 +54,7 @@ public class GradientColor implements StylePaint {
     }
 
     @Override
-    public void paint(Component com, Graphics g, Shape shape) {
+    public void paint(Component com, Graphics g, StyleShape shape) {
         if (endPoint == null) {
             g.setColor(startColor);
         } else {

@@ -1,7 +1,7 @@
 package raven.swing.blur.style;
 
-import com.formdev.flatlaf.ui.FlatUIUtils;
 import com.formdev.flatlaf.util.UIScale;
+import raven.swing.blur.util.StyleShape;
 import raven.swing.blur.util.Utils;
 import raven.swing.shadow.ShadowRenderer;
 
@@ -13,6 +13,11 @@ public class StyleDropShadow implements StylePaint {
     private Color color;
     private float opacity;
     private Insets insets;
+
+    private int oldWidth;
+    private int oldHeight;
+
+    private BufferedImage buffImage;
 
     public StyleDropShadow(Color color, float opacity, Insets insets) {
         this.color = color;
@@ -33,13 +38,21 @@ public class StyleDropShadow implements StylePaint {
     }
 
     @Override
-    public void paint(Component com, Graphics g, Shape shape) {
+    public void paint(Component com, Graphics g, StyleShape shape) {
         Dimension size = com.getBounds().getSize();
+        if (size.width == 0 || size.height == 0) {
+            return;
+        }
         int shadowSize = Utils.getMaxInsert(getInsets()) * 2;
-        //  test arc
-        float arc = UIScale.scale(20);
-        Shape shapeImage = FlatUIUtils.createRoundRectanglePath(0, 0, size.width - shadowSize, size.height - shadowSize, arc, arc, arc, arc);
-        g.drawImage(createShadowBorder(size.width, size.height, shapeImage, shape), 0, 0, null);
+        Shape shapeImage = shape.getStyle().getBorder().createShape(new Rectangle(new Dimension(size.width - shadowSize, size.height - shadowSize)));
+        if (buffImage == null || size.width != oldWidth || size.height != oldHeight) {
+            buffImage = createShadowBorder(size.width, size.height, shapeImage, shape.getShape());
+            oldWidth = size.width;
+            oldHeight = size.height;
+        }
+        if (buffImage != null) {
+            g.drawImage(buffImage, 0, 0, null);
+        }
     }
 
     private BufferedImage createShadowBorder(int w, int h, Shape shapeImage, Shape shape) {
