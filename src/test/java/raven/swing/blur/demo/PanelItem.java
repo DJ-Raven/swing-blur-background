@@ -3,10 +3,7 @@ package raven.swing.blur.demo;
 import com.formdev.flatlaf.FlatClientProperties;
 import net.miginfocom.swing.MigLayout;
 import raven.swing.blur.BlurChild;
-import raven.swing.blur.style.GradientColor;
-import raven.swing.blur.style.Style;
-import raven.swing.blur.style.StyleBorder;
-import raven.swing.blur.style.StyleOverlay;
+import raven.swing.blur.style.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,7 +24,9 @@ public class PanelItem extends BlurChild {
                                 new Point2D.Float(0, 0),
                                 new Point2D.Float(1, 1)
                         ))
+                        .setDropShadow(new StyleDropShadow(new Color(0, 0, 0), 0.6f, new Insets(0, 0, 15, 15)))
                 )
+
                 .setOverlay(new StyleOverlay(
                         new GradientColor(
                                 Color.decode("#C9D6FF"),
@@ -40,7 +39,7 @@ public class PanelItem extends BlurChild {
     }
 
     private void init() {
-        setLayout(new MigLayout("wrap,al center center", "[center]"));
+        setLayout(new MigLayout("insets 10 0 0 0,wrap", "[]"));
         JLabel label = new JLabel("Move me");
         label.putClientProperty(FlatClientProperties.STYLE, "" +
                 "font:bold +5");
@@ -52,6 +51,6 @@ public class PanelItem extends BlurChild {
             label.setText("Move me " + ran.nextInt(999));
         });
         add(button);
-        add(new SubPanelItem(), "width 200,height 150", 0);
+        //  add(new SubPanelItem(), "width 200,height 150");
     }
 }

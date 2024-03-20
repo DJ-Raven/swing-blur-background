@@ -23,4 +23,8 @@ public class Utils {
             rec.height = height - rec.y;
         }
     }
+
+    public static int getMaxInsert(Insets insets) {
+        return Math.max(Math.max(insets.left, insets.right), Math.max(insets.top, insets.bottom));
+    }
 }

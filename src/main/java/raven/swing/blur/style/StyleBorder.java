@@ -18,6 +18,8 @@ public class StyleBorder implements StylePaint {
     private StylePaint borderColor;
     private float opacity = 1f;
 
+    private StyleDropShadow dropShadow;
+
     public StyleBorder(float arc) {
         arcTopLeft = arcTopRight = arcBottomLeft = arcBottomRight = arc;
     }
@@ -62,8 +64,13 @@ public class StyleBorder implements StylePaint {
         return this;
     }
 
+    public StyleBorder setDropShadow(StyleDropShadow style) {
+        this.dropShadow = style;
+        return this;
+    }
+
     public Insets getInsets() {
-        int width = (int) borderWidth;
+        int width = (int) UIScale.scale(borderWidth);
         return new Insets(width, width, width, width);
     }
 
@@ -81,6 +88,10 @@ public class StyleBorder implements StylePaint {
 
     public float getBorderWidth() {
         return borderWidth;
+    }
+
+    public StyleDropShadow getDropShadow() {
+        return dropShadow;
     }
 
     public Shape createShape(Rectangle rec) {
@@ -116,6 +127,11 @@ public class StyleBorder implements StylePaint {
                 return;
             }
         }
+        if (dropShadow != null) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            dropShadow.paint(com, g2, shape);
+            g2.dispose();
+        }
         if (opacity > 0) {
             Graphics2D g2 = (Graphics2D) g.create();
             FlatUIUtils.setRenderingHints(g2);
@@ -127,7 +143,7 @@ public class StyleBorder implements StylePaint {
             if (opacity < 1) {
                 g2.setComposite(AlphaComposite.SrcOver.derive(opacity));
             }
-            g2.fill(createBorder(new Rectangle(com.getSize())));
+            g2.fill(createBorder(shape.getBounds()));
             g2.dispose();
         }
     }

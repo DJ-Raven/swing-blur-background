@@ -50,7 +50,7 @@ public class Demo extends JFrame {
 
     public static void main(String[] args) {
         FlatRobotoFont.install();
-       // System.setProperty("flatlaf.uiScale", "1.5f");
+        // System.setProperty("flatlaf.uiScale", "2f");
         FlatMacDarkLaf.setup();
         EventQueue.invokeLater(() -> new Demo().setVisible(true));
     }

@@ -1,5 +1,6 @@
 package raven.swing.blur;
 
+import com.formdev.flatlaf.ui.FlatUIUtils;
 import raven.swing.blur.style.Style;
 import raven.swing.blur.util.BlurComponent;
 import raven.swing.blur.util.Utils;
@@ -24,7 +25,7 @@ public class BlurChild extends BlurComponent implements BlurChildData {
 
     private void init() {
         setOpaque(true);
-    //    installMouseMove();
+        installMouseMove();
     }
 
     @Override
@@ -54,6 +55,7 @@ public class BlurChild extends BlurComponent implements BlurChildData {
         Rectangle bound = getBounds();
         boolean isRec = isRectangle();
         float blur = style.getBlur();
+
         // create background image
         BlurChildData blurChildData = getBlurChildData(this);
         if (!isRec && isOpaque()) {
@@ -71,16 +73,24 @@ public class BlurChild extends BlurComponent implements BlurChildData {
         }
         BlurData blurData = getBlurData(this);
         if (blurData != null) {
-            Rectangle rec = SwingUtilities.convertRectangle(getParent(), bound, blurData.getSource());
+            Insets insets = style == null || style.getBorder() == null || style.getBorder().getDropShadow() == null ? new Insets(0, 0, 0, 0) : style.getBorder().getDropShadow().getInsets();
+            Rectangle blurRec = FlatUIUtils.subtractInsets(bound, insets);
+            Rectangle rec = SwingUtilities.convertRectangle(getParent(), blurRec, blurData.getSource());
             Shape shape = style == null ? rec : style.getBorder() == null ? rec : style.getBorder().createShape(rec);
             Image image = blurData.getBlurImageAt(shape, blur);
             int x = rec.x >= 0 ? 0 : rec.x * -1;
             int y = rec.y >= 0 ? 0 : rec.y * -1;
             if (image != null) {
-                g2.drawImage(image, x, y, null);
+                g2.drawImage(image, insets.left + x, insets.top + y, null);
             }
             if (style != null) {
-                Shape defaultShape = style == null ? rec : style.getBorder() == null ? rec : style.getBorder().createShape(new Rectangle(bound.getSize()));
+                Rectangle r;
+                if (style.getBorder() == null || style.getBorder().getDropShadow() == null) {
+                    r = new Rectangle(bound.getSize());
+                } else {
+                    r = FlatUIUtils.subtractInsets(new Rectangle(bound.getSize()), style.getBorder().getDropShadow().getInsets());
+                }
+                Shape defaultShape = style.getBorder() == null ? r : style.getBorder().createShape(r);
                 style.paint(this, g2, defaultShape);
             }
         }
@@ -93,7 +103,11 @@ public class BlurChild extends BlurComponent implements BlurChildData {
     @Override
     public Insets getInsets() {
         if (style != null && style.getBorder() != null) {
-            return style.getBorder().getInsets();
+            if (style.getBorder().getDropShadow() != null) {
+                return FlatUIUtils.addInsets(style.getBorder().getInsets(), style.getBorder().getDropShadow().getInsets());
+            } else {
+                return style.getBorder().getInsets();
+            }
         }
         return super.getInsets();
     }

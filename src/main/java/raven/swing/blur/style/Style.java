@@ -43,7 +43,7 @@ public class Style implements StylePaint {
         if (overlay != null && overlay.getOpacity() > 0f) {
             overlay.paint(com, g, shape);
         }
-        if (border != null && border.getBorderWidth() > 0) {
+        if (border != null && (border.getBorderWidth() > 0 || border.getDropShadow() != null)) {
             border.paint(com, g, shape);
         }
     }
