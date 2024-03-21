@@ -39,7 +39,7 @@ public class PanelItem extends BlurChild {
     }
 
     private void init() {
-        setLayout(new MigLayout("insets 10 0 0 0,wrap", "[]"));
+        setLayout(new MigLayout("insets 10 0 0 0,wrap,center", "[center]"));
         JLabel label = new JLabel("Move me");
         label.putClientProperty(FlatClientProperties.STYLE, "" +
                 "font:bold +5");

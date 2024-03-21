@@ -26,7 +26,6 @@ public class BlurChild extends BlurComponent implements BlurChildData {
 
     private void init() {
         setOpaque(true);
-        installMouseMove();
     }
 
     @Override
@@ -92,7 +91,7 @@ public class BlurChild extends BlurComponent implements BlurChildData {
                     r = FlatUIUtils.subtractInsets(new Rectangle(bound.getSize()), style.getBorder().getDropShadow().getInsets());
                 }
                 Shape defaultShape = style.getBorder() == null ? r : style.getBorder().createShape(r);
-                style.paint(this, g2, new StyleShape(defaultShape,style));
+                style.paint(this, g2, new StyleShape(defaultShape, style));
             }
         }
         g2.dispose();
