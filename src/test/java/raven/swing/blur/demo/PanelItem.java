@@ -51,6 +51,6 @@ public class PanelItem extends BlurChild {
             label.setText("Move me " + ran.nextInt(999));
         });
         add(button);
-        //  add(new SubPanelItem(), "width 200,height 150");
+        add(new SubPanelItem(), "width 200,height 150");
     }
 }

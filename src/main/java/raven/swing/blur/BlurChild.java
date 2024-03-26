@@ -54,10 +54,13 @@ public class BlurChild extends BlurComponent implements BlurChildData {
         Graphics2D g2 = paintImage.createGraphics();
         Rectangle bound = getBounds();
         boolean isRec = isRectangle();
-        float blur = style.getBlur();
+        float blur = style == null ? 0 : style.getBlur();
 
         // create background image
         BlurChildData blurChildData = getBlurChildData(this);
+        if (blurChildData == null) {
+            return;
+        }
         if (!isRec && isOpaque()) {
             Rectangle rec = SwingUtilities.convertRectangle(getParent(), bound, blurChildData.getSource());
             int x = rec.x >= 0 ? 0 : rec.x * -1;

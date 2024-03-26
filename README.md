@@ -6,15 +6,15 @@ Blur background custom using java swing with flatlaf, include style shadow borde
 
 ## Installation
 This project library do not available in maven central. so you can install with the jar library
-- Copy jar library file to the root project. exp : `library/swing-blur-background-1.0.0.jar`
+- Copy jar library file to the root project. exp : `library/swing-blur-background-1.0.1.jar`
 - Add this code to `pom.xml`
 ``` xml
 <dependency>
     <groupId>raven.swing</groupId>
     <artifactId>swing-blur-background</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <scope>system</scope>
-    <systemPath>${basedir}/library/swing-blur-background-1.0.0.jar</systemPath>
+    <systemPath>${basedir}/library/swing-blur-background-1.0.1.jar</systemPath>
 </dependency>
 ```
 - Other library are use with this library
