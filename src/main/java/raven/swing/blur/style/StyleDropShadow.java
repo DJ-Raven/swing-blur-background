@@ -60,7 +60,8 @@ public class StyleDropShadow implements StylePaint {
         BufferedImage image = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = image.createGraphics();
         ShadowRenderer shadowRenderer = new ShadowRenderer(shadowSize, opacity, color);
-        g2.drawImage(shadowRenderer.createShadow(createImage(shapeImage)), 0, 0, null);
+        Rectangle rec = shapeImage.getBounds();
+        g2.drawImage(shadowRenderer.createShadow(createImage(shapeImage)), rec.x, rec.y, null);
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setComposite(AlphaComposite.Clear);
         g2.fill(shape);
@@ -75,6 +76,7 @@ public class StyleDropShadow implements StylePaint {
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = image.createGraphics();
         g2.setColor(color);
+        g2.translate(-rec.getX(), -rec.getY());
         g2.fill(shape);
         g2.dispose();
         return image;

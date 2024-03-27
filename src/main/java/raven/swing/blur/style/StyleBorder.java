@@ -16,6 +16,8 @@ public class StyleBorder implements StylePaint {
 
     private float borderWidth;
 
+    private Insets margin;
+
     private StylePaint borderColor;
     private float opacity = 1f;
 
@@ -50,6 +52,11 @@ public class StyleBorder implements StylePaint {
         return this;
     }
 
+    public StyleBorder setMargin(Insets margin) {
+        this.margin = margin;
+        return this;
+    }
+
     public StyleBorder setBorderColor(Color color) {
         borderColor = new GradientColor(color);
         return this;
@@ -72,7 +79,14 @@ public class StyleBorder implements StylePaint {
 
     public Insets getInsets() {
         int width = (int) UIScale.scale(borderWidth);
-        return new Insets(width, width, width, width);
+        Insets insets = new Insets(width, width, width, width);
+        if (margin != null) {
+            insets = FlatUIUtils.addInsets(insets, UIScale.scale(margin));
+        }
+        if (dropShadow != null) {
+            insets = FlatUIUtils.addInsets(insets, dropShadow.getInsets());
+        }
+        return insets;
     }
 
     public boolean isRectangle() {
@@ -91,11 +105,18 @@ public class StyleBorder implements StylePaint {
         return borderWidth;
     }
 
+    public Insets getMargin() {
+        return margin;
+    }
+
     public StyleDropShadow getDropShadow() {
         return dropShadow;
     }
 
     public Shape createShape(Rectangle rec) {
+        if (margin != null) {
+            rec = FlatUIUtils.subtractInsets(rec, UIScale.scale(margin));
+        }
         if (arcTopLeft == 0 && arcTopRight == 0 && arcBottomLeft == 0 && arcBottomRight == 0) {
             return rec;
         } else {

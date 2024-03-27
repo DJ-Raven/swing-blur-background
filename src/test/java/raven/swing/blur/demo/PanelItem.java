@@ -14,7 +14,7 @@ public class PanelItem extends BlurChild {
 
     public PanelItem() {
         super(new Style()
-                .setBlur(20f)
+                .setBlur(0f)
                 .setBorder(new StyleBorder(20)
                         .setBorderWidth(1.5f)
                         .setOpacity(0.1f)
